@@ -1,5 +1,6 @@
 import "./App.css"
+import FormBuilder from "./pages/FormBuilder"
 
 export default function App() {
-  return <div>App</div>
+  return <FormBuilder />
 }
