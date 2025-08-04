@@ -1,16 +1,20 @@
-import type { ResumeStore } from "@/types/ResumeStore"
-import type { Step2 } from "@/types/Step2"
+import type { Language, PersonalInformation, Resume } from "@/types"
 import { create } from "zustand"
-import { step2DefaultValues } from "../types/step2DefaultValues"
-import { step1DefaultValues } from "../types/step1DefaultValues"
+
+type ResumeStore = {
+  resume: Resume | undefined
+  personalInformation: PersonalInformation | undefined
+  language: Language | undefined
+  setResume: (data: Resume) => void
+  setPersonalInformation: (data: PersonalInformation) => void
+  setLanguage: (data: Language) => void
+}
 
 export const useResumeStore = create<ResumeStore>((set) => ({
-  currentTab: 1,
-  step1: step1DefaultValues,
-  step2: step2DefaultValues,
-  setCurrentTab: () =>
-    set((state) => ({
-      currentTab: state.currentTab + 1,
-    })),
-  setStep2: (data: Step2) => set({ step2: data }),
+  resume: undefined,
+  personalInformation: undefined,
+  language: undefined,
+  setResume: (data) => set({ resume: data }),
+  setPersonalInformation: (data) => set({ personalInformation: data }),
+  setLanguage: (data) => set({ language: data }),
 }))
