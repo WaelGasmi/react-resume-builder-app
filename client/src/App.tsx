@@ -1,12 +1,15 @@
 import "./App.css"
 import ResumePreview from "./components/ResumePreview"
 import TabsSection from "./components/TabsSection"
+import { useResumeStore } from "./store/ResumeStore"
 
 export default function App() {
+  const resume = useResumeStore((state) => state.resume)
+
   return (
     <div className="flex gap-4">
       <TabsSection />
-      <ResumePreview />
+      <ResumePreview resume={resume} />
     </div>
   )
 }

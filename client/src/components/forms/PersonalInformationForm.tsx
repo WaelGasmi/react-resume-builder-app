@@ -1,9 +1,9 @@
 import { PersonalInformationSchema, type PersonalInformation } from "@/types"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form"
-import { Input } from "./ui/input"
-import { TabsContent } from "./ui/tabs"
+import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form"
+import { Input } from "../ui/input"
+import { TabsContent } from "../ui/tabs"
 import { useEffect } from "react"
 import { useResumeStore } from "@/store/ResumeStore"
 
@@ -24,17 +24,17 @@ export default function PersonalInformationForm() {
     defaultValues: defaultValues,
   })
 
-  const { setPersonalInformation } = useResumeStore()
+  const setResume = useResumeStore((state) => state.setResume)
 
   useEffect(() => {
     const subscription = form.watch(async (values) => {
       const valid = await form.trigger()
       if (valid) {
-        setPersonalInformation(values as PersonalInformation)
+        setResume({ personalInformation: values })
       }
     })
     return () => subscription.unsubscribe()
-  }, [form, setPersonalInformation])
+  }, [form, setResume])
 
   return (
     <TabsContent value={"1"}>

@@ -7,7 +7,7 @@ import type {
 } from "."
 
 export type Resume = {
-  id: string
+  id?: string
   title: string
   userId: string
   personalInformation: PersonalInformation
