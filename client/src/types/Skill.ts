@@ -1,11 +1,9 @@
 import { z } from "zod"
 
 export const SkillSchema = z.object({
-  name: z.string(),
+  id: z.string().optional(),
+  name: z.string().optional(),
   proficiency: z.string().optional(),
 })
 
-export type Skill = z.infer<typeof SkillSchema> & {
-  id: string
-  resumeId: string
-}
+export type Skill = z.infer<typeof SkillSchema>

@@ -7,7 +7,7 @@ export default function App() {
   const resume = useResumeStore((state) => state.resume)
 
   return (
-    <div className="flex gap-4">
+    <div className="grid grid-cols-2 gap-4">
       <TabsSection />
       <ResumePreview resume={resume} />
     </div>

@@ -1,69 +1,66 @@
 import { PersonalInformationSchema, type PersonalInformation } from "@/types"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form"
 import { Input } from "../ui/input"
 import { TabsContent } from "../ui/tabs"
-import { useEffect } from "react"
 import { useResumeStore } from "@/store/ResumeStore"
-
-const defaultValues: PersonalInformation = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  jobTitle: "",
-  phone: "",
-  github: "",
-  linkedin: "",
-  portfolio: "",
-}
+import { personalInformationDefaultValues } from "@/defaults/personalInformationDefaultValues"
+import { Separator } from "../ui/separator"
 
 export default function PersonalInformationForm() {
   const form = useForm<PersonalInformation>({
     resolver: zodResolver(PersonalInformationSchema),
-    defaultValues: defaultValues,
+    defaultValues: personalInformationDefaultValues,
+    mode: "onChange",
   })
 
   const setResume = useResumeStore((state) => state.setResume)
 
-  useEffect(() => {
-    const subscription = form.watch(async (values) => {
-      const valid = await form.trigger()
-      if (valid) {
-        setResume({ personalInformation: values })
-      }
-    })
-    return () => subscription.unsubscribe()
-  }, [form, setResume])
+  const addPersonalInformation = (data: PersonalInformation) => {
+    setResume({ personalInformation: data })
+  }
 
   return (
     <TabsContent value={"1"}>
       <Form {...form}>
-        <form className="space-y-2">
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>First Name</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last Name</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+        <form
+          onChange={form.handleSubmit(addPersonalInformation)}
+          className="space-y-2"
+        >
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name="email"
@@ -76,30 +73,36 @@ export default function PersonalInformationForm() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="jobTitle"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Job title</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="jobTitle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Job title</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone</FormLabel>
+                  <FormControl>
+                    <Input type="tel" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <Separator />
+          <h4 className="text-sm font-medium text-left mb-4">Links</h4>
           <FormField
             control={form.control}
             name="github"
@@ -107,8 +110,9 @@ export default function PersonalInformationForm() {
               <FormItem>
                 <FormLabel>Github</FormLabel>
                 <FormControl>
-                  <Input type="url" {...field} />
+                  <Input type="url" {...field} placeholder="https://" />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -119,8 +123,9 @@ export default function PersonalInformationForm() {
               <FormItem>
                 <FormLabel>Linkedin</FormLabel>
                 <FormControl>
-                  <Input type="url" {...field} />
+                  <Input type="url" {...field} placeholder="https://" />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -131,8 +136,9 @@ export default function PersonalInformationForm() {
               <FormItem>
                 <FormLabel>Portfolio</FormLabel>
                 <FormControl>
-                  <Input type="url" {...field} />
+                  <Input type="url" {...field} placeholder="https://" />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />

@@ -1,43 +1,44 @@
 import { LanguageSchema, type Language } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form"
 import { Input } from "../ui/input"
 import { TabsContent } from "../ui/tabs"
-import { useEffect, useState } from "react"
 import { useResumeStore } from "@/store/ResumeStore"
 import { Button } from "../ui/button"
-
-const defaultValues: Language = {
-  name: "",
-  proficiency: "",
-}
+import { languageDefaultValues } from "@/defaults"
+import LanguagesList from "../lists/LanguagesList"
+import { Select, SelectContent, SelectTrigger, SelectValue } from "../ui/select"
+import ProficienciesList from "../lists/ProficienciesList"
 
 export default function LanguageForm() {
-  const [langs, setLangs] = useState<Language[]>([])
-  const setResume = useResumeStore((state) => state.setResume)
-  const resume = useResumeStore((state) => state.resume)
+  const { setResume, resume } = useResumeStore()
+  const languages = resume?.language ?? []
 
   const form = useForm<Language>({
     resolver: zodResolver(LanguageSchema),
-    defaultValues: defaultValues,
+    defaultValues: languageDefaultValues,
   })
 
   const addLanguage = (data: Language) => {
-    setLangs((prev) => [...prev, data])
-    form.reset(defaultValues)
+    setResume({ language: [...languages, data] })
+    form.reset(languageDefaultValues)
   }
-
-  useEffect(() => {
-    setResume({ language: langs })
-  }, [langs, setResume])
-
-  console.log(resume)
 
   return (
     <TabsContent value={"3"}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(addLanguage)}>
+        <form
+          onSubmit={form.handleSubmit(addLanguage)}
+          className="flex gap-4 items-end"
+        >
           <FormField
             control={form.control}
             name="name"
@@ -56,21 +57,28 @@ export default function LanguageForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Proficiency</FormLabel>
-                <FormControl>
-                  <Input type="range" {...field} min={1} max={10} step={1} />
-                </FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Language" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <FormMessage />
+                  <SelectContent>
+                    <ProficienciesList />
+                  </SelectContent>
+                </Select>
               </FormItem>
             )}
           />
           <Button type="submit">Add Language</Button>
         </form>
       </Form>
-      {langs.map((item) => (
-        <div key={item.name}>
-          <p>{item.name}</p>
-          <p>{item.proficiency}</p>
-        </div>
-      ))}
+
+      <LanguagesList languages={languages} />
     </TabsContent>
   )
 }

@@ -10,7 +10,6 @@ export default function TabsSection() {
         <TabsTrigger value="3">Languages</TabsTrigger>
         <TabsTrigger value="4">Skills</TabsTrigger>
         <TabsTrigger value="5">Education</TabsTrigger>
-        <TabsTrigger value="6">Certifications</TabsTrigger>
       </TabsList>
       <TabsContent />
     </Tabs>
