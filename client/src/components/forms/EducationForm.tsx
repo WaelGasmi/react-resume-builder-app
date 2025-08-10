@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useResumeStore } from "@/store/ResumeStore"
 import { Input } from "../ui/input"
 import { TabsContent } from "../ui/tabs"
+import NextPreviousButtons from "../NextPreviousButtons"
 
 const defaultValues: Education = {
   institute: "",
@@ -43,9 +44,9 @@ export default function EducationForm() {
   }, [setResume, educations])
 
   return (
-    <TabsContent value="5">
+    <TabsContent value="5" className="space-y-5">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(addEducation)}>
+        <form onSubmit={form.handleSubmit(addEducation)} className="space-y-5">
           <FormField
             control={form.control}
             name="institute"
@@ -67,6 +68,8 @@ export default function EducationForm() {
           </>
         ))}
       </Form>
+
+      <NextPreviousButtons />
     </TabsContent>
   )
 }

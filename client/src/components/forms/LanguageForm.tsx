@@ -17,6 +17,7 @@ import { languageDefaultValues } from "@/defaults"
 import LanguagesList from "../lists/LanguagesList"
 import { Select, SelectContent, SelectTrigger, SelectValue } from "../ui/select"
 import ProficienciesList from "../lists/ProficienciesList"
+import NextPreviousButtons from "../NextPreviousButtons"
 
 export default function LanguageForm() {
   const { setResume, resume } = useResumeStore()
@@ -33,7 +34,7 @@ export default function LanguageForm() {
   }
 
   return (
-    <TabsContent value={"3"}>
+    <TabsContent value={"3"} className="space-y-5">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(addLanguage)}
@@ -79,6 +80,8 @@ export default function LanguageForm() {
       </Form>
 
       <LanguagesList languages={languages} />
+
+      <NextPreviousButtons />
     </TabsContent>
   )
 }

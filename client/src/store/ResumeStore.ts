@@ -8,7 +8,6 @@ type ResumeStore = {
 
 export const useResumeStore = create<ResumeStore>((set) => ({
   resume: undefined,
-
   setResume: (data) =>
     set((state) => ({
       resume: state.resume ? { ...state.resume, ...data } : (data as Resume),

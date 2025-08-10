@@ -14,6 +14,8 @@ import { TabsContent } from "../ui/tabs"
 import { useResumeStore } from "@/store/ResumeStore"
 import { personalInformationDefaultValues } from "@/defaults/personalInformationDefaultValues"
 import { Separator } from "../ui/separator"
+import { useEffect } from "react"
+import NextPreviousButtons from "../NextPreviousButtons"
 
 export default function PersonalInformationForm() {
   const form = useForm<PersonalInformation>({
@@ -28,12 +30,16 @@ export default function PersonalInformationForm() {
     setResume({ personalInformation: data })
   }
 
+  useEffect(() => {
+    form.setFocus("firstName")
+  }, [form])
+
   return (
-    <TabsContent value={"1"}>
+    <TabsContent value={"1"} className="space-y-5">
       <Form {...form}>
         <form
           onChange={form.handleSubmit(addPersonalInformation)}
-          className="space-y-2"
+          className="space-y-5"
         >
           <div className="grid grid-cols-2 gap-4">
             <FormField
@@ -144,6 +150,8 @@ export default function PersonalInformationForm() {
           />
         </form>
       </Form>
+
+      <NextPreviousButtons />
     </TabsContent>
   )
 }

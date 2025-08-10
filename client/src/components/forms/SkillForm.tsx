@@ -1,5 +1,12 @@
 import { useForm } from "react-hook-form"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form"
 import { TabsContent } from "../ui/tabs"
 import { SkillSchema, type Skill } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -15,6 +22,7 @@ import { Button } from "../ui/button"
 import { useResumeStore } from "@/store/ResumeStore"
 import { skillDefaultValues } from "@/defaults/skillDefaultValues"
 import SkillsList from "../lists/SkillsList"
+import NextPreviousButtons from "../NextPreviousButtons"
 
 export default function SkillForm() {
   const { resume, setResume } = useResumeStore()
@@ -31,9 +39,12 @@ export default function SkillForm() {
   }
 
   return (
-    <TabsContent value="4">
+    <TabsContent value="4" className="space-y-5">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(addSkill)}>
+        <form
+          onSubmit={form.handleSubmit(addSkill)}
+          className="flex gap-4 justify-between items-end"
+        >
           <FormField
             control={form.control}
             name="name"
@@ -86,6 +97,8 @@ export default function SkillForm() {
       </Form>
 
       <SkillsList skills={skills} />
+
+      <NextPreviousButtons />
     </TabsContent>
   )
 }

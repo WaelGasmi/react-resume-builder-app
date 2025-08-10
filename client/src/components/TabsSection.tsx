@@ -1,9 +1,12 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import TabsContent from "./TabsContent"
+import { useTabStore } from "@/store/TabStore"
 
 export default function TabsSection() {
+  const value = useTabStore((state) => state.value)
+
   return (
-    <Tabs defaultValue="1" className="w-fit">
+    <Tabs value={value.toString()} className="w-fit space-y-5">
       <TabsList>
         <TabsTrigger value="1">Personal Information</TabsTrigger>
         <TabsTrigger value="2">Work Experiences</TabsTrigger>

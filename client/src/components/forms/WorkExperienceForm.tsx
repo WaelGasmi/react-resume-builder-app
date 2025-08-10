@@ -14,6 +14,7 @@ import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { TabsContent } from "../ui/tabs"
 import { useResumeStore } from "@/store/ResumeStore"
+import NextPreviousButtons from "../NextPreviousButtons"
 
 const defaultValues: Experience = {
   location: "",
@@ -44,9 +45,9 @@ export default function WorkExperienceForm() {
   }, [setResume, experiences])
 
   return (
-    <TabsContent value="2">
+    <TabsContent value="2" className="space-y-5">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(addExperience)}>
+        <form onSubmit={form.handleSubmit(addExperience)} className="space-y-5">
           <FormField
             control={form.control}
             name="description"
@@ -68,6 +69,8 @@ export default function WorkExperienceForm() {
           </>
         ))}
       </Form>
+
+      <NextPreviousButtons />
     </TabsContent>
   )
 }
