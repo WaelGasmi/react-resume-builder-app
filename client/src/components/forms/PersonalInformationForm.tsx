@@ -18,17 +18,26 @@ import { useEffect } from "react"
 import NextPreviousButtons from "../NextPreviousButtons"
 
 export default function PersonalInformationForm() {
+  const setResume = useResumeStore((state) => state.setResume)
+  const resume = useResumeStore((state) => state.resume)
+  console.log(resume)
+
   const form = useForm<PersonalInformation>({
     resolver: zodResolver(PersonalInformationSchema),
     defaultValues: personalInformationDefaultValues,
     mode: "onChange",
   })
 
-  const setResume = useResumeStore((state) => state.setResume)
+  useEffect(() => {
+    const subscription = form.watch(async () => {
+      const isValid = await form.trigger()
+      if (!isValid) return
+      const data = form.getValues()
+      setResume({ personalInformation: data })
+    })
 
-  const addPersonalInformation = (data: PersonalInformation) => {
-    setResume({ personalInformation: data })
-  }
+    return subscription.unsubscribe()
+  }, [setResume, form])
 
   useEffect(() => {
     form.setFocus("firstName")
@@ -37,10 +46,7 @@ export default function PersonalInformationForm() {
   return (
     <TabsContent value={"1"} className="space-y-5">
       <Form {...form}>
-        <form
-          onChange={form.handleSubmit(addPersonalInformation)}
-          className="space-y-5"
-        >
+        <form className="space-y-5">
           <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
@@ -100,7 +106,7 @@ export default function PersonalInformationForm() {
                 <FormItem>
                   <FormLabel>Phone</FormLabel>
                   <FormControl>
-                    <Input type="tel" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -151,7 +157,7 @@ export default function PersonalInformationForm() {
         </form>
       </Form>
 
-      <NextPreviousButtons />
+      <NextPreviousButtons disabled={!form.formState.isValid} />
     </TabsContent>
   )
 }

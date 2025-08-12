@@ -18,6 +18,7 @@ import LanguagesList from "../lists/LanguagesList"
 import { Select, SelectContent, SelectTrigger, SelectValue } from "../ui/select"
 import ProficienciesList from "../lists/ProficienciesList"
 import NextPreviousButtons from "../NextPreviousButtons"
+import { v4 as uuidv4 } from "uuid"
 
 export default function LanguageForm() {
   const { setResume, resume } = useResumeStore()
@@ -29,8 +30,15 @@ export default function LanguageForm() {
   })
 
   const addLanguage = (data: Language) => {
-    setResume({ language: [...languages, data] })
+    setResume({ language: [...languages, { ...data, id: uuidv4() }] })
     form.reset(languageDefaultValues)
+  }
+
+  const onRemoveLanguage = (languageId: string) => {
+    const filteredLanguages = languages.filter(
+      (language) => language.id !== languageId
+    )
+    setResume({ language: filteredLanguages })
   }
 
   return (
@@ -75,13 +83,22 @@ export default function LanguageForm() {
               </FormItem>
             )}
           />
-          <Button type="submit">Add Language</Button>
+          <Button
+            type="submit"
+            variant={"secondary"}
+            disabled={!form.formState.isValid}
+          >
+            Add Language
+          </Button>
         </form>
       </Form>
 
-      <LanguagesList languages={languages} />
+      <LanguagesList
+        languages={languages}
+        onRemoveLanguage={onRemoveLanguage}
+      />
 
-      <NextPreviousButtons />
+      <NextPreviousButtons disabled={!form.formState.isValid} />
     </TabsContent>
   )
 }

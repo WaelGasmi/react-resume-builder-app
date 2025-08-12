@@ -92,13 +92,19 @@ export default function SkillForm() {
               </FormItem>
             )}
           />
-          <Button type="submit">Add Skill</Button>
+          <Button
+            type="submit"
+            variant={"secondary"}
+            disabled={!form.formState.isValid}
+          >
+            Add Skill
+          </Button>
         </form>
       </Form>
 
       <SkillsList skills={skills} />
 
-      <NextPreviousButtons />
+      <NextPreviousButtons disabled={!form.formState.isValid} />
     </TabsContent>
   )
 }

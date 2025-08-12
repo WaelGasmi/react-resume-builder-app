@@ -8,40 +8,42 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useResumeStore } from "@/store/ResumeStore"
 import { Input } from "../ui/input"
 import { TabsContent } from "../ui/tabs"
 import NextPreviousButtons from "../NextPreviousButtons"
-
-const defaultValues: Education = {
-  institute: "",
-  startDate: new Date(),
-  endDate: new Date(),
-  id: "",
-  resumeId: "",
-}
+import EducationList from "../lists/EducationList"
+import { v4 as uuidv4 } from "uuid"
+import { educationDefaultValues } from "@/defaults"
 
 export default function EducationForm() {
-  const [educations, setEducations] = useState<Education[]>([])
-
-  const setResume = useResumeStore((state) => state.setResume)
+  const { setResume, resume } = useResumeStore()
+  const educations = resume?.education ?? []
 
   const form = useForm<Education>({
     resolver: zodResolver(EducationSchema),
-    defaultValues: defaultValues,
+    defaultValues: educationDefaultValues,
+    mode: "onChange",
   })
 
   const addEducation = (data: Education) => {
-    setEducations((prev) => [...prev, data])
-    form.reset(defaultValues)
+    setResume({ education: [...educations, { ...data, id: uuidv4() }] })
+    form.reset(educationDefaultValues)
+  }
+
+  const onRemoveEducation = (educationId: string) => {
+    const filteredEducations = educations.filter(
+      (education) => education.id !== educationId
+    )
+    setResume({ education: filteredEducations })
   }
 
   useEffect(() => {
-    setResume({ education: educations })
-  }, [setResume, educations])
+    form.setFocus("institute")
+  }, [form])
 
   return (
     <TabsContent value="5" className="space-y-5">
@@ -60,16 +62,49 @@ export default function EducationForm() {
               </FormItem>
             )}
           />
-          <Button type="submit">Add Education</Button>
+          <FormField
+            control={form.control}
+            name="startDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Start Date</FormLabel>
+                <FormControl>
+                  <Input type="date" {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="endDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>End Date</FormLabel>
+                <FormControl>
+                  <Input
+                    type="date"
+                    {...field}
+                    min={form.getValues("startDate")}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <Button
+            type="submit"
+            variant={"secondary"}
+            disabled={!form.formState.isValid}
+          >
+            Add Education
+          </Button>
         </form>
-        {educations.map((edu) => (
-          <>
-            <p key={edu.institute}>{edu.institute}</p>
-          </>
-        ))}
       </Form>
 
-      <NextPreviousButtons />
+      <EducationList
+        educations={educations}
+        onRemoveEducation={onRemoveEducation}
+      />
+      <NextPreviousButtons disabled={!form.formState.isValid} />
     </TabsContent>
   )
 }

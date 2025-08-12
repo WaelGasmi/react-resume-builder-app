@@ -7,22 +7,18 @@ import {
   CardTitle,
 } from "../ui/card"
 import { X } from "lucide-react"
-import { useResumeStore } from "@/store/ResumeStore"
 
-type LanguagesListProps = { languages: Language[] }
+type LanguagesListProps = {
+  languages: Language[]
+  onRemoveLanguage: (languageId: string) => void
+}
 
-export default function LanguagesList({ languages }: LanguagesListProps) {
-  const setResume = useResumeStore((state) => state.setResume)
-
-  const removeLanguage = (name: string | undefined) => {
-    const filteredLanguages = languages.filter(
-      (language) => language.name !== name
-    )
-    setResume({ language: filteredLanguages })
-  }
-
+export default function LanguagesList({
+  languages,
+  onRemoveLanguage,
+}: LanguagesListProps) {
   return (
-    <>
+    <div className="space-y-5">
       {languages.map((language) => (
         <Card key={language.name} className="w-xs text-left p-4">
           <CardHeader>
@@ -30,13 +26,13 @@ export default function LanguagesList({ languages }: LanguagesListProps) {
             <CardDescription>{language.proficiency}</CardDescription>
             <CardAction
               className="cursor-pointer hover:text-red-600"
-              onClick={() => removeLanguage(language.name)}
+              onClick={() => onRemoveLanguage(language.name ?? "")}
             >
               <X />
             </CardAction>
           </CardHeader>
         </Card>
       ))}
-    </>
+    </div>
   )
 }
