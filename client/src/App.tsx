@@ -8,7 +8,7 @@ export default function App() {
 
   return (
     <div className="grid grid-cols-2 gap-4 ">
-      <TabsSection />
+      <TabsSection resume={resume} />
       <ResumePreview resume={resume} />
     </div>
   )

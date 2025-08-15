@@ -20,7 +20,7 @@ export default function ExperienceList({
   onRemoveExperience,
 }: experienceListProps) {
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 text-left">
       {experiences.map((exp) => (
         <Card key={exp.id}>
           <CardHeader>

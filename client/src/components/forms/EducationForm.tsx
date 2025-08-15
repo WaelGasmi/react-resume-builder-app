@@ -35,10 +35,12 @@ export default function EducationForm() {
   }
 
   const onRemoveEducation = (educationId: string) => {
-    const filteredEducations = educations.filter(
-      (education) => education.id !== educationId
-    )
-    setResume({ education: filteredEducations })
+    if (educationId) {
+      const filteredEducations = educations.filter(
+        (education) => education.id !== educationId
+      )
+      setResume({ education: filteredEducations })
+    }
   }
 
   useEffect(() => {

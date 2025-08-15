@@ -16,10 +16,10 @@ export default function PersonalInformationSection({
         {data.firstName} {data.lastName}
       </p>
       <p className="text-red-500 font-bold text-2xl">{data.jobTitle}</p>
-      <p className="text-sm flex justify-between">
+      <div className="text-sm flex justify-between">
         {data.email && <p>{data.email}</p>}
         {data.phone && <p>{data.phone}</p>}
-      </p>
+      </div>
 
       <div>
         {data.github && (

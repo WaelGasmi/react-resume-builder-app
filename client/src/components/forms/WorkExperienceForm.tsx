@@ -19,12 +19,10 @@ import { Textarea } from "../ui/textarea"
 import { v4 as uuidv4 } from "uuid"
 import ExperienceList from "../lists/ExperienceList"
 
-const today = new Date().toISOString().split("T")[0]
-
 const defaultValues: Experience = {
   location: "",
-  startDate: today,
-  endDate: today,
+  startDate: "",
+  endDate: "",
   description: "",
   resumeId: "",
   corporate: "",
@@ -43,14 +41,19 @@ export default function WorkExperienceForm() {
 
   const addExperience = (data: Experience) => {
     setResume({
-      experience: [...experiences, { ...data, id: uuidv4() }],
+      experience: [
+        ...experiences,
+        { ...data, id: uuidv4(), endDate: data.endDate || "Present" },
+      ],
     })
     form.reset(defaultValues)
   }
 
   const onRemoveExperience = (expId: string) => {
-    const filteredExperiences = experiences.filter((exp) => exp.id !== expId)
-    setResume({ experience: filteredExperiences })
+    if (expId) {
+      const filteredExperiences = experiences.filter((exp) => exp.id !== expId)
+      setResume({ experience: filteredExperiences })
+    }
   }
 
   useEffect(() => {

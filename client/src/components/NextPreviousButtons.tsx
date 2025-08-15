@@ -1,7 +1,7 @@
 import { useTabStore } from "@/store/TabStore"
 import { Button } from "./ui/button"
 
-type NextPreviousButtonsProps = { disabled: boolean }
+type NextPreviousButtonsProps = { disabled?: boolean }
 
 export default function NextPreviousButtons({
   disabled,
@@ -15,7 +15,7 @@ export default function NextPreviousButtons({
           Previous
         </Button>
       )}
-      {value < 5 && (
+      {value < 6 && (
         <Button onClick={next} disabled={disabled}>
           Next
         </Button>

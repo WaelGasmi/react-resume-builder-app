@@ -23,6 +23,7 @@ import { useResumeStore } from "@/store/ResumeStore"
 import { skillDefaultValues } from "@/defaults/skillDefaultValues"
 import SkillsList from "../lists/SkillsList"
 import NextPreviousButtons from "../NextPreviousButtons"
+import { v4 as uuidv4 } from "uuid"
 
 export default function SkillForm() {
   const { resume, setResume } = useResumeStore()
@@ -34,17 +35,25 @@ export default function SkillForm() {
   })
 
   const addSkill = (data: Skill) => {
-    setResume({ skill: [...skills, data] })
-    form.reset(skillDefaultValues)
+    if (data.name?.trim() === "") return
+    if (Object.values(data).some((v) => v.trim() !== "")) {
+      const newSkill: Skill = { ...data, id: uuidv4() }
+      setResume({ skill: [...skills, newSkill] })
+      form.reset(skillDefaultValues)
+    }
+  }
+
+  const onRemoveSkill = (skillId: string) => {
+    if (skillId) {
+      const filteredSkills = skills.filter((skill) => skill.id !== skillId)
+      setResume({ skill: filteredSkills })
+    }
   }
 
   return (
     <TabsContent value="4" className="space-y-5">
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(addSkill)}
-          className="flex gap-4 justify-between items-end"
-        >
+        <form onSubmit={form.handleSubmit(addSkill)} className="space-y-5">
           <FormField
             control={form.control}
             name="name"
@@ -52,7 +61,7 @@ export default function SkillForm() {
               <FormItem>
                 <FormLabel>Skill</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
+                  <FormControl className="w-full">
                     <SelectTrigger>
                       <SelectValue placeholder="Select a Skill" />
                     </SelectTrigger>
@@ -76,7 +85,7 @@ export default function SkillForm() {
               <FormItem>
                 <FormLabel>Proficiency</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
+                  <FormControl className="w-full">
                     <SelectTrigger>
                       <SelectValue placeholder="Select Proficiency" />
                     </SelectTrigger>
@@ -102,7 +111,7 @@ export default function SkillForm() {
         </form>
       </Form>
 
-      <SkillsList skills={skills} />
+      <SkillsList skills={skills} OnRemoveSkill={onRemoveSkill} />
 
       <NextPreviousButtons disabled={!form.formState.isValid} />
     </TabsContent>

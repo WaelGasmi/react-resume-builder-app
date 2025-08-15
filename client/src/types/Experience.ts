@@ -3,11 +3,11 @@ import { z } from "zod"
 export const ExperienceSchema = z.object({
   id: z.string().optional(),
   resumeId: z.string().optional(),
-  startDate: z.string().nonempty("Start date is required"),
-  endDate: z.string().nonempty("End date is required"),
-  location: z.string().nonempty("Location is required"),
-  description: z.string().nonempty("Description is required"),
-  corporate: z.string().nonempty("Corporate is required"),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  location: z.string().optional(),
+  description: z.string().optional(),
+  corporate: z.string().optional(),
 })
 
 export type Experience = z.infer<typeof ExperienceSchema>

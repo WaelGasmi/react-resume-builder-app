@@ -1,4 +1,5 @@
 import { create } from "zustand"
+import { persist } from "zustand/middleware"
 
 type TabStore = {
   value: number
@@ -6,8 +7,13 @@ type TabStore = {
   next: () => void
 }
 
-export const useTabStore = create<TabStore>((set) => ({
-  value: 1,
-  previous: () => set((state) => ({ value: Math.max(1, state.value - 1) })),
-  next: () => set((state) => ({ value: Math.min(state.value + 1) })),
-}))
+export const useTabStore = create<TabStore>()(
+  persist<TabStore>(
+    (set) => ({
+      value: 1,
+      previous: () => set((state) => ({ value: Math.max(1, state.value - 1) })),
+      next: () => set((state) => ({ value: Math.min(state.value + 1) })),
+    }),
+    { name: "tab-store" }
+  )
+)

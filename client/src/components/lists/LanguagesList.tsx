@@ -18,15 +18,15 @@ export default function LanguagesList({
   onRemoveLanguage,
 }: LanguagesListProps) {
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 text-left">
       {languages.map((language) => (
-        <Card key={language.name} className="w-xs text-left p-4">
+        <Card key={language.id} className="w-xs text-left p-4">
           <CardHeader>
             <CardTitle>{language.name}</CardTitle>
             <CardDescription>{language.proficiency}</CardDescription>
             <CardAction
               className="cursor-pointer hover:text-red-600"
-              onClick={() => onRemoveLanguage(language.name ?? "")}
+              onClick={() => onRemoveLanguage(language.id ?? "")}
             >
               <X />
             </CardAction>

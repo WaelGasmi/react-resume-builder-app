@@ -17,26 +17,28 @@ import { Separator } from "../ui/separator"
 import { useEffect } from "react"
 import NextPreviousButtons from "../NextPreviousButtons"
 
-export default function PersonalInformationForm() {
+type PersonalInformationProps = {
+  data?: PersonalInformation
+}
+
+export default function PersonalInformationForm({
+  data,
+}: PersonalInformationProps) {
   const setResume = useResumeStore((state) => state.setResume)
-  const resume = useResumeStore((state) => state.resume)
-  console.log(resume)
 
   const form = useForm<PersonalInformation>({
     resolver: zodResolver(PersonalInformationSchema),
-    defaultValues: personalInformationDefaultValues,
+    defaultValues: data ?? personalInformationDefaultValues,
     mode: "onChange",
   })
 
   useEffect(() => {
     const subscription = form.watch(async () => {
-      const isValid = await form.trigger()
-      if (!isValid) return
       const data = form.getValues()
       setResume({ personalInformation: data })
     })
 
-    return subscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [setResume, form])
 
   useEffect(() => {

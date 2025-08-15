@@ -20,9 +20,13 @@ import ProficienciesList from "../lists/ProficienciesList"
 import NextPreviousButtons from "../NextPreviousButtons"
 import { v4 as uuidv4 } from "uuid"
 
-export default function LanguageForm() {
+type LanguageFormProps = {
+  formData?: Language[]
+}
+
+export default function LanguageForm({ formData }: LanguageFormProps) {
   const { setResume, resume } = useResumeStore()
-  const languages = resume?.language ?? []
+  const languages = formData ?? resume?.language ?? []
 
   const form = useForm<Language>({
     resolver: zodResolver(LanguageSchema),
@@ -35,19 +39,18 @@ export default function LanguageForm() {
   }
 
   const onRemoveLanguage = (languageId: string) => {
-    const filteredLanguages = languages.filter(
-      (language) => language.id !== languageId
-    )
-    setResume({ language: filteredLanguages })
+    if (languageId) {
+      const filteredLanguages = languages.filter(
+        (language) => language.id !== languageId
+      )
+      setResume({ language: filteredLanguages })
+    }
   }
 
   return (
     <TabsContent value={"3"} className="space-y-5">
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(addLanguage)}
-          className="flex gap-4 items-end"
-        >
+        <form onSubmit={form.handleSubmit(addLanguage)} className="space-y-5">
           <FormField
             control={form.control}
             name="name"
@@ -70,7 +73,7 @@ export default function LanguageForm() {
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  <FormControl>
+                  <FormControl className="w-full">
                     <SelectTrigger>
                       <SelectValue placeholder="Select Language" />
                     </SelectTrigger>

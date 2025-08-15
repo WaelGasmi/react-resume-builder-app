@@ -1,10 +1,9 @@
 import type { Education } from "@/types"
-import { today } from "@/utils/today"
 
 export const educationDefaultValues: Education = {
   institute: "",
-  startDate: today,
-  endDate: today,
+  startDate: "",
+  endDate: "",
   id: "",
   resumeId: "",
 }

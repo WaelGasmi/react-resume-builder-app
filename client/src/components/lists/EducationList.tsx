@@ -19,7 +19,7 @@ export default function EducationList({
   onRemoveEducation,
 }: EducationListProps) {
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 text-left">
       {educations.map((education) => (
         <Card key={education.id}>
           <CardHeader>

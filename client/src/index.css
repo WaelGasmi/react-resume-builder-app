@@ -118,3 +118,18 @@
     @apply bg-background text-foreground;
   }
 }
+
+@media print {
+  #resumePReviewContent {
+    zoom: 1 !important;
+  }
+}
+
+#resumePReviewContent {
+  font-family: Inter;
+}
+
+@page {
+  size: A4;
+  margin: 0.6cm;
+}
